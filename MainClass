@@ -1,0 +1,44 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class PairsMain {
+
+	public static void main(String[] args) {
+		String source = "[{[(})[[]]]()]";
+		System.out.println(isPairsAreGood(source));
+
+    }
+	
+	
+	public static boolean isPairsAreGood(String source) {
+		char[] dataSource = source.toCharArray();
+		List<Character> toAnalize = IntStream.range(0, dataSource.length).mapToObj(i -> dataSource[i]).collect(Collectors.toList());
+		//List<Character> toAnalize = (ArrayList<Character>) source.chars().mapToObj(c -> (char)c).collect(Collectors.toList());
+		Map<Character, Character> pairsMap = Map.of('[',']','{','}','(',')');
+		Character nextChar;
+		Character closePairLastCharTemData;
+		List<Character> tempData = new ArrayList<>();
+		tempData.add(toAnalize.get(0));
+		
+		for (int i = 1; i < toAnalize.size(); i++) {
+			int lastIndexTempData = tempData.size() - 1;
+			Character lastCharTemData = tempData.get(lastIndexTempData);
+			closePairLastCharTemData = pairsMap.get(lastCharTemData);
+			nextChar = toAnalize.get(i);
+			if (closePairLastCharTemData != null && closePairLastCharTemData.equals(nextChar)) {
+				tempData.remove(lastIndexTempData);
+			} else {
+				Character actualChar = toAnalize.get(i);
+				tempData.add(actualChar);
+			}	
+		}
+			
+		if (tempData.size() == 0) {
+			return true;
+		} 
+		return false;
+	}
+}
